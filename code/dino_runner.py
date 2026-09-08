@@ -19,6 +19,9 @@ velocity = 0
 gravity = 0.8
 floor_line = 500
 cactus_x_pos = 1000
+cactus_timer = 0
+cactus_interval = 3
+obstacle_list = []
 
 while not window_should_close():
     update_music_stream(music)
@@ -33,14 +36,20 @@ while not window_should_close():
         play_sound(jump_sound)
 
     # obstacle logic
-    cactus_x_pos -= 8
+    cactus_timer += 0.02
+    if cactus_timer > cactus_interval:
+        cactus_timer = 0
+        obstacle_list.append(Vector2(1280 + get_random_value(-100, 100), floor_line))
 
+    for obstacle_pos in obstacle_list:
+        obstacle_pos.x -= 8
 
     begin_drawing()
     clear_background(RAYWHITE)
     draw_line_ex(Vector2(0, floor_line + 120), Vector2(1280, floor_line + 120), 10, GRAY)
     draw_texture_ex(dino_texture, dine_pos, 0, 5, WHITE)
-    draw_texture_ex(cactus_texture, Vector2(cactus_x_pos, floor_line), 0, 5, WHITE)
+    for obstacle_pos in obstacle_list:
+        draw_texture_ex(cactus_texture, obstacle_pos, 0, 5, WHITE)
 
     # collision
     dino_rec = Rectangle(dine_pos.x, dine_pos.y, dino_texture.width * 5, dino_texture.height * 5)
