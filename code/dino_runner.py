@@ -39,7 +39,7 @@ while not window_should_close():
     cactus_timer += 0.02
     if cactus_timer > cactus_interval:
         cactus_timer = 0
-        obstacle_list.append(Vector2(1280 + get_random_value(-100, 100), floor_line))
+        obstacle_list.append(Vector2(1280, floor_line))
 
     for obstacle_pos in obstacle_list:
         obstacle_pos.x -= 8
@@ -52,11 +52,12 @@ while not window_should_close():
         draw_texture_ex(cactus_texture, obstacle_pos, 0, 5, WHITE)
 
     # collision
-    dino_rec = Rectangle(dine_pos.x, dine_pos.y, dino_texture.width * 5, dino_texture.height * 5)
-    cactus_rec = Rectangle(cactus_x_pos, floor_line, cactus_texture.width * 5, cactus_texture.height * 5)
-    if check_collision_recs(dino_rec, cactus_rec):
-        exit()
- 
+    dino_rect = Rectangle(dine_pos.x, dine_pos.y, dino_texture.width * 5, dino_texture.height * 5)
+    for obstacle_pos in obstacle_list:
+        obstacle_rect = Rectangle(obstacle_pos.x, obstacle_pos.y, cactus_texture.width * 5, cactus_texture.height * 5)
+        if check_collision_recs(dino_rect, obstacle_rect):
+            exit()
+
     # text
     score_string = f"score: {int(get_time())}"
     text_width = measure_text_ex(custom_font, score_string, 40, 1).x
