@@ -15,12 +15,14 @@ class Sprite:
         )
 
 class Dino(Sprite):
-    def __init__(self, texture, pos, jump_sound):
-        super().__init__(texture, pos)
+    def __init__(self, run_texture, pos, jump_sound):
+        self.run_texture = run_texture
+        super().__init__(run_texture[0], pos)
         self.jump_sound = jump_sound
         self.velocity = 0
         self.gravity = 0.8
         self.jump_height = -28
+        self.frame_index = 0
 
     def update(self):
         self.velocity += self.gravity
@@ -31,3 +33,9 @@ class Dino(Sprite):
         if is_key_pressed(rl.KEY_SPACE):
             self.velocity -= self.jump_height
             play_sound(self.jump_sound)
+
+    def draw(self):
+        self.frame_index += 0.1
+        self.frame_index %= len(self.run_texture)
+        self.texture = self.run_texture[int(self.frame_index)]
+        super().draw()
