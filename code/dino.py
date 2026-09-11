@@ -1,14 +1,19 @@
 from settings import *
-from sprites import Sprite
+from sprites import Sprite, Dino
 
 class Game:
     def __init__(self):
         init_window(WINDOW_WIDTH, WINDOW_HEIGHT, DINO_NAME)
+        init_audio_device()
         set_target_fps(FPS)
-        self.sprite = Sprite(
+        self.dino = Dino(
             load_texture(join("assets", "dino", "run0.png")), 
-            Vector2(100, 100)
+            Vector2(100, FLOOR_LINE),
+            load_sound(join("audio", "jump.wav"))
         )
+
+    def update(self):
+        self.dino.update()
 
     def draw(self):
         begin_drawing()
@@ -20,12 +25,13 @@ class Game:
             MAIN_COLOR
         )
 
-        self.sprite.draw()
+        self.dino.draw()
 
         end_drawing()
 
     def run(self):
         while not window_should_close():
+            self.update()
             self.draw()
 
 
