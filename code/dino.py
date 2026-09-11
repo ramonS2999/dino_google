@@ -5,21 +5,26 @@ class Game:
     def __init__(self):
         init_window(WINDOW_WIDTH, WINDOW_HEIGHT, DINO_NAME)
         init_audio_device()
-        set_target_fps(FPS)
         self.import_assets()
         self.dino = Dino(
             self.assets['player_run'],
+            self.assets['player_jump'],
             Vector2(100, FLOOR_LINE),
-            load_sound(join("audio", "jump.wav"))
+            self.audio['jump']
         )
 
     def import_assets(self):
         self.assets = {
-            'player_run': [load_texture(join("assets", "dino", f"run{i}.png")) for i in range(2)]
+            'player_run': [load_texture(join("assets", "dino", f"run{i}.png")) for i in range(2)],
+            'player_jump': load_texture(join("assets", "dino", "jump.png")),
         }
 
-    def update(self):
-        self.dino.update()
+        self.audio = {
+            'jump': load_sound(join("audio", "jump.wav")),
+        }
+
+    def update(self, dt):
+        self.dino.update(dt)
 
     def draw(self):
         begin_drawing()
@@ -37,7 +42,8 @@ class Game:
 
     def run(self):
         while not window_should_close():
-            self.update()
+            dt = get_frame_time()
+            self.update(dt)
             self.draw()
 
 

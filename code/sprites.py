@@ -15,27 +15,33 @@ class Sprite:
         )
 
 class Dino(Sprite):
-    def __init__(self, run_texture, pos, jump_sound):
+    def __init__(self, run_texture, jump_texture, pos, jump_sound):
         self.run_texture = run_texture
+        self.jump_texture = jump_texture
         super().__init__(run_texture[0], pos)
         self.jump_sound = jump_sound
         self.velocity = 0
-        self.gravity = 0.8
-        self.jump_height = -28
+        self.gravity = 300
+        self.jump_height = -400
         self.frame_index = 0
 
-    def update(self):
-        self.velocity += self.gravity
-        self.pos.y += self.velocity
+    def update(self, dt):
+        # gravity
+        self.velocity += self.gravity * dt
+        self.pos.y += self.velocity * dt
         if self.pos.y > FLOOR_LINE:
             self.pos.y = FLOOR_LINE
             self.velocity = 0
+
+        # jump input
         if is_key_pressed(rl.KEY_SPACE):
-            self.velocity -= self.jump_height
+            self.velocity = self.jump_height
             play_sound(self.jump_sound)
 
-    def draw(self):
-        self.frame_index += 0.1
+        # animation
+        self.frame_index += ANIMATION_SPEED * dt
         self.frame_index %= len(self.run_texture)
-        self.texture = self.run_texture[int(self.frame_index)]
+
+    def draw(self):
+        self.texture = self.run_texture[int(self.frame_index)] if self.pos.y >= FLOOR_LINE else self.jump_texture
         super().draw()
