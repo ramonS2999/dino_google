@@ -14,6 +14,14 @@ class Sprite:
             WHITE
         )
 
+class MovingSprite(Sprite):
+    def __init__(self, texture, pos, speed):
+        super().__init__(texture, pos)
+        self.speed = speed
+
+    def update(self, dt):
+        self.pos.x -= self.speed * dt
+
 class Dino(Sprite):
     def __init__(self, run_texture, jump_texture, pos, jump_sound):
         self.run_texture = run_texture

@@ -1,6 +1,7 @@
 import raylib as rl
 from pyray import *
 from os.path import join
+from random import choice, randint
 
 WINDOW_WIDTH, WINDOW_HEIGHT = 1280, 720
 DINO_NAME = "Dino runner"
